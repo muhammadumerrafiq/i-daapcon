@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useInView } from "@/hooks/useInView";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import speakerIntl1 from "@/assets/speaker-intl-1.jpg";
@@ -101,20 +101,31 @@ interface SpeakerCardProps {
 }
 
 const SpeakerCard = ({ speaker, onOpen }: SpeakerCardProps) => (
-  <div className="relative group flex-shrink-0 w-60 rounded-xl overflow-hidden shadow-card cursor-pointer">
+  <div
+    className="relative group flex-shrink-0 rounded-xl overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-2"
+    style={{
+      width: "220px",
+      boxShadow: "0 4px 20px rgba(0,0,0,0.35)",
+    }}
+    onMouseEnter={(e) => {
+      (e.currentTarget as HTMLDivElement).style.boxShadow = "0 12px 40px rgba(0,0,0,0.55)";
+    }}
+    onMouseLeave={(e) => {
+      (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 20px rgba(0,0,0,0.35)";
+    }}
+  >
     <img
       src={speaker.image}
       alt={speaker.name}
-      className="w-full h-72 object-cover transition-transform duration-500 group-hover:scale-110"
+      className="w-full object-cover transition-transform duration-500 group-hover:scale-105"
+      style={{ height: "280px" }}
       loading="lazy"
-      width={240}
-      height={288}
     />
     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
     <div className="absolute bottom-0 left-0 right-0 p-4">
       <p className="text-xs gold-text font-sans font-semibold tracking-wide mb-1">{speaker.country}</p>
-      <h4 className="text-white font-serif font-bold text-base leading-tight mb-1">{speaker.name}</h4>
-      <p className="text-white/70 text-xs font-sans mb-3">{speaker.specialty}</p>
+      <h4 className="text-white font-serif font-bold text-sm leading-tight mb-1">{speaker.name}</h4>
+      <p className="text-white/65 text-xs font-sans mb-3">{speaker.specialty}</p>
       <button
         onClick={() => onOpen(speaker)}
         className="btn-gold text-xs px-4 py-2 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300"
@@ -128,46 +139,75 @@ const SpeakerCard = ({ speaker, onOpen }: SpeakerCardProps) => (
 interface CarouselProps {
   speakers: Speaker[];
   onOpen: (s: Speaker) => void;
+  label: string;
 }
 
-const SpeakerCarousel = ({ speakers, onOpen }: CarouselProps) => {
-  const [index, setIndex] = useState(0);
-  const visible = 4;
-  const max = Math.max(0, speakers.length - visible);
+const CARD_WIDTH = 220;
+const CARD_GAP = 16;
 
+const SpeakerCarousel = ({ speakers, onOpen, label }: CarouselProps) => {
+  const [index, setIndex] = useState(0);
+  const [visible, setVisible] = useState(4);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const update = () => {
+      const w = containerRef.current?.offsetWidth ?? window.innerWidth;
+      setVisible(Math.floor(w / (CARD_WIDTH + CARD_GAP)));
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  const max = Math.max(0, speakers.length - visible);
   const prev = () => setIndex((i) => Math.max(0, i - 1));
   const next = () => setIndex((i) => Math.min(max, i + 1));
 
   return (
-    <div className="relative">
-      <div className="overflow-hidden">
+    <div className="mb-10">
+      {/* Subheading row with nav controls */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-3">
+          <div
+            className="w-1 h-7 rounded"
+            style={{ background: "linear-gradient(to bottom, hsl(38, 46%, 56%), hsl(46, 62%, 52%))" }}
+          />
+          <h3 className="text-lg font-serif font-bold text-white">{label}</h3>
+        </div>
+        <div className="flex gap-2">
+          <button
+            onClick={prev}
+            disabled={index === 0}
+            className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:border-gold hover:text-gold disabled:opacity-25 transition-all duration-200"
+            aria-label="Previous"
+          >
+            <ChevronLeft size={16} />
+          </button>
+          <button
+            onClick={next}
+            disabled={index >= max}
+            className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:border-gold hover:text-gold disabled:opacity-25 transition-all duration-200"
+            aria-label="Next"
+          >
+            <ChevronRight size={16} />
+          </button>
+        </div>
+      </div>
+
+      {/* Carousel track */}
+      <div ref={containerRef} className="overflow-hidden">
         <div
-          className="flex gap-5 transition-transform duration-500 ease-in-out"
-          style={{ transform: `translateX(calc(-${index * (240 + 20)}px))` }}
+          className="flex transition-transform duration-500 ease-in-out"
+          style={{
+            gap: `${CARD_GAP}px`,
+            transform: `translateX(calc(-${index * (CARD_WIDTH + CARD_GAP)}px))`,
+          }}
         >
           {speakers.map((s) => (
             <SpeakerCard key={s.id} speaker={s} onOpen={onOpen} />
           ))}
         </div>
-      </div>
-      {/* Controls */}
-      <div className="flex gap-3 mt-6 justify-end">
-        <button
-          onClick={prev}
-          disabled={index === 0}
-          className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:border-gold hover:text-gold disabled:opacity-30 transition-all"
-          aria-label="Previous"
-        >
-          <ChevronLeft size={18} />
-        </button>
-        <button
-          onClick={next}
-          disabled={index >= max}
-          className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:border-gold hover:text-gold disabled:opacity-30 transition-all"
-          aria-label="Next"
-        >
-          <ChevronRight size={18} />
-        </button>
       </div>
     </div>
   );
@@ -215,49 +255,35 @@ const SpeakersSection = () => {
   const [selected, setSelected] = useState<Speaker | null>(null);
 
   return (
-    <section id="speakers" className="py-24 bg-charcoal-dark">
+    <section id="speakers" className="py-16 bg-charcoal-dark">
       <div className="container mx-auto px-6 max-w-7xl">
         <div
           ref={ref}
           className={`transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
         >
-          <div className="text-center mb-14">
-            <p className="text-sm font-sans font-semibold tracking-widest uppercase gold-text mb-3">
-              Faculty
-            </p>
-            <h2 className="text-3xl md:text-4xl font-bold font-serif text-white text-center mb-3">
-              Speakers & Faculty
-            </h2>
+          {/* Section header */}
+          <div className="text-center mb-10">
+            <p className="text-xs font-sans font-semibold tracking-widest uppercase gold-text mb-2">Faculty</p>
+            <h2 className="text-3xl md:text-4xl font-bold font-serif text-white mb-3">Speakers & Faculty</h2>
             <div className="section-divider" />
           </div>
 
-          {/* International */}
-          <div className="mb-14">
-            <div className="flex items-center gap-3 mb-7">
-              <div
-                className="w-1 h-8 rounded"
-                style={{ background: "linear-gradient(to bottom, hsl(38, 46%, 56%), hsl(46, 62%, 52%))" }}
-              />
-              <h3 className="text-xl font-serif font-bold text-white">International Faculty</h3>
-            </div>
-            <SpeakerCarousel speakers={internationalSpeakers} onOpen={setSelected} />
-          </div>
+          {/* International Faculty */}
+          <SpeakerCarousel
+            speakers={internationalSpeakers}
+            onOpen={setSelected}
+            label="International Faculty"
+          />
 
-          {/* Local */}
-          <div>
-            <div className="flex items-center gap-3 mb-7">
-              <div
-                className="w-1 h-8 rounded"
-                style={{ background: "linear-gradient(to bottom, hsl(38, 46%, 56%), hsl(46, 62%, 52%))" }}
-              />
-              <h3 className="text-xl font-serif font-bold text-white">Local Speakers & Trainers</h3>
-            </div>
-            <SpeakerCarousel speakers={localSpeakers} onOpen={setSelected} />
-          </div>
+          {/* Local Speakers */}
+          <SpeakerCarousel
+            speakers={localSpeakers}
+            onOpen={setSelected}
+            label="Local Speakers & Trainers"
+          />
         </div>
       </div>
 
-      {/* Modal */}
       {selected && <SpeakerModal speaker={selected} onClose={() => setSelected(null)} />}
     </section>
   );
