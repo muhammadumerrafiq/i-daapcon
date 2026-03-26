@@ -45,8 +45,21 @@ const HeroSection = () => {
             </span>
           </div>
 
+          {/* Subtle radial glow behind heading */}
+          <div
+            className="absolute pointer-events-none"
+            style={{
+              width: "520px",
+              height: "320px",
+              left: "40px",
+              background:
+                "radial-gradient(ellipse at 30% 50%, rgba(197,160,89,0.18) 0%, transparent 70%)",
+              filter: "blur(24px)",
+            }}
+          />
+
           {/* Main heading */}
-          <div>
+          <div className="relative">
             <h1
               className="text-white font-serif font-bold leading-none tracking-tight"
               style={{ fontSize: "clamp(3.5rem, 8vw, 6rem)" }}
