@@ -15,10 +15,22 @@ const HeroSection = () => {
         style={{ backgroundImage: `url(${heroBg})` }}
       />
 
-      {/* Left-side gradient for text readability — fades to transparent on the right */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
+      {/* Primary left-to-right gradient: strong dark left for text, warm right */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(to right, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.42) 45%, rgba(0,0,0,0.10) 70%, rgba(197,160,89,0.12) 100%)",
+        }}
+      />
       {/* Subtle top/bottom vignette */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/30" />
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.25) 100%)",
+        }}
+      />
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-8 md:px-16 max-w-7xl pt-28 pb-24">
