@@ -49,11 +49,11 @@ const LeadershipSection = () => {
               }`}
               style={{ transitionDelay: `${i * 150}ms` }}
             >
-              <div className="relative overflow-hidden h-72">
+              <div className="relative overflow-hidden" style={{ height: "320px" }}>
                 <img
                   src={leader.image}
                   alt={leader.name}
-                  className="w-full h-full object-cover object-top transition-transform duration-500 hover:scale-105"
+                  className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105"
                   loading="lazy"
                   width={512}
                   height={512}

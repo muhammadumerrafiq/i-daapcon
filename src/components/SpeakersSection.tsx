@@ -104,7 +104,8 @@ const SpeakerCard = ({ speaker, onOpen }: SpeakerCardProps) => (
   <div
     className="relative group flex-shrink-0 rounded-xl overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-2"
     style={{
-      width: "220px",
+      width: "250px",
+      minWidth: "250px",
       boxShadow: "0 4px 20px rgba(0,0,0,0.35)",
     }}
     onMouseEnter={(e) => {
@@ -142,72 +143,73 @@ interface CarouselProps {
   label: string;
 }
 
-const CARD_WIDTH = 220;
-const CARD_GAP = 16;
-
 const SpeakerCarousel = ({ speakers, onOpen, label }: CarouselProps) => {
-  const [index, setIndex] = useState(0);
-  const [visible, setVisible] = useState(4);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 2);
+    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 2);
+  };
 
   useEffect(() => {
-    const update = () => {
-      const w = containerRef.current?.offsetWidth ?? window.innerWidth;
-      setVisible(Math.floor(w / (CARD_WIDTH + CARD_GAP)));
-    };
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
+    checkScroll();
+    window.addEventListener("resize", checkScroll);
+    return () => window.removeEventListener("resize", checkScroll);
   }, []);
 
-  const max = Math.max(0, speakers.length - visible);
-  const prev = () => setIndex((i) => Math.max(0, i - 1));
-  const next = () => setIndex((i) => Math.min(max, i + 1));
+  const scroll = (dir: number) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollBy({ left: dir * 260, behavior: "smooth" });
+  };
 
   return (
-    <div className="mb-10">
+    <div className="mb-12">
       {/* Subheading row with nav controls */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-3">
           <div
-            className="w-1 h-7 rounded"
+            className="w-1.5 h-8 rounded-full"
             style={{ background: "linear-gradient(to bottom, hsl(38, 46%, 56%), hsl(46, 62%, 52%))" }}
           />
-          <h3 className="text-lg font-serif font-bold text-white">{label}</h3>
+          <h3 className="text-xl font-serif font-bold text-gold">{label}</h3>
         </div>
         <div className="flex gap-2">
           <button
-            onClick={prev}
-            disabled={index === 0}
-            className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:border-gold hover:text-gold disabled:opacity-25 transition-all duration-200"
+            onClick={() => scroll(-1)}
+            disabled={!canScrollLeft}
+            className="w-10 h-10 rounded-full border-2 border-gold/40 flex items-center justify-center text-gold hover:bg-gold hover:text-white disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-gold transition-all duration-200"
             aria-label="Previous"
           >
-            <ChevronLeft size={16} />
+            <ChevronLeft size={18} />
           </button>
           <button
-            onClick={next}
-            disabled={index >= max}
-            className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:border-gold hover:text-gold disabled:opacity-25 transition-all duration-200"
+            onClick={() => scroll(1)}
+            disabled={!canScrollRight}
+            className="w-10 h-10 rounded-full border-2 border-gold/40 flex items-center justify-center text-gold hover:bg-gold hover:text-white disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-gold transition-all duration-200"
             aria-label="Next"
           >
-            <ChevronRight size={16} />
+            <ChevronRight size={18} />
           </button>
         </div>
       </div>
 
       {/* Carousel track */}
-      <div ref={containerRef} className="overflow-hidden">
-        <div
-          className="flex transition-transform duration-500 ease-in-out"
-          style={{
-            gap: `${CARD_GAP}px`,
-            transform: `translateX(calc(-${index * (CARD_WIDTH + CARD_GAP)}px))`,
-          }}
-        >
-          {speakers.map((s) => (
-            <SpeakerCard key={s.id} speaker={s} onOpen={onOpen} />
-          ))}
-        </div>
+      <div
+        ref={scrollRef}
+        onScroll={checkScroll}
+        className="flex gap-5 overflow-x-auto scrollbar-hide pb-2"
+        style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}
+      >
+        {speakers.map((s) => (
+          <div key={s.id} style={{ scrollSnapAlign: "start" }}>
+            <SpeakerCard speaker={s} onOpen={onOpen} />
+          </div>
+        ))}
       </div>
     </div>
   );
