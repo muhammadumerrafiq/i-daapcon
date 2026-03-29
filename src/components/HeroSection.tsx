@@ -73,7 +73,7 @@ const HeroSection = () => {
 
           {/* Subheading */}
           <p className="text-white/75 text-base md:text-lg font-sans font-light leading-relaxed max-w-sm">
-            International Dermatology and Aesthetic Association of Pakistan
+            International Dermatology and Aesthetic Conference
           </p>
 
           {/* Event details */}

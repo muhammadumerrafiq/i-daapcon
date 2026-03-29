@@ -4,28 +4,20 @@ import logo from "@/assets/idaap-logo.png";
 import chairmanImg from "@/assets/chairman.jpg";
 import presidentImg from "@/assets/president.jpg";
 import vpImg from "@/assets/vice-president.jpg";
-import speakerLocal1 from "@/assets/speaker-local-1.jpg";
-import speakerLocal2 from "@/assets/speaker-local-2.jpg";
-import speakerLocal3 from "@/assets/speaker-local-3.jpg";
-import speakerIntl1 from "@/assets/speaker-intl-1.jpg";
-import speakerIntl3 from "@/assets/speaker-intl-3.jpg";
-import speakerIntl4 from "@/assets/speaker-intl-4.jpg";
-import speakerIntl2 from "@/assets/speaker-intl-2.jpg";
+import anitaImg from "@/assets/anita.jpg";
+import sohailImg from "@/assets/sohail.jpg";
+import uzairImg from "@/assets/uzair.jpg";
+import dureshehwarImg from "@/assets/dureshehwar.jpg";
 import { useInView } from "@/hooks/useInView";
 
 const members = [
-  { name: "Prof. Dr. Ahmed Raza Khan", role: "Chairman", image: chairmanImg },
-  { name: "Prof. Dr. Tariq Mehmood", role: "President", image: presidentImg },
-  { name: "Dr. Sana Zafar", role: "Vice President", image: vpImg },
-  { name: "Dr. Hassan Bilal Niazi", role: "Scientific Head", image: speakerLocal1 },
-  { name: "Dr. Ayesha Imran", role: "Co-Secretary", image: speakerLocal2 },
-  { name: "Prof. Dr. Irfan Mirza", role: "Surgical Lead", image: speakerLocal3 },
-  { name: "Prof. Dr. Jean-François Morel", role: "Int'l Liaison", image: speakerIntl1 },
-  { name: "Dr. Wei Lin Chen", role: "Workshop Director", image: speakerIntl2 },
-  { name: "Dr. Khalid Al-Mansouri", role: "Research Lead", image: speakerIntl3 },
-  { name: "Prof. Dr. Isabella Ricci", role: "Education Chair", image: speakerIntl4 },
-  { name: "Dr. Faisal Iqbal", role: "Treasurer", image: speakerLocal1 },
-  { name: "Dr. Maryam Shah", role: "Coordinator", image: speakerLocal2 },
+  { name: "Maj Gen (Retd) Zafar Iqbal Shaikh", role: "Chairman of IDAAP", image: chairmanImg },
+  { name: "Dr Bilal Shams", role: "President of IDAAP", image: presidentImg },
+  { name: "Dr Neelam Ayub", role: "Vice President of IDAAP", image: vpImg },
+  { name: "Dr Anita Kazi", role: "Director Coordination and Management", image: anitaImg },
+  { name: "Dr Sohail Ahmad", role: "Director Social Media and Marketing", image: sohailImg },
+  { name: "Dr Uzair Wazir", role: "General Secretary", image: uzairImg },
+  { name: "Dr Dureshehwar Marwat", role: "Secretary Finance", image: dureshehwarImg },
 ];
 
 const MemberCard = ({ member, delay }: { member: typeof members[0]; delay: number }) => {
@@ -59,7 +51,6 @@ const MemberCard = ({ member, delay }: { member: typeof members[0]; delay: numbe
 
 const CoreCommittee = () => (
   <div className="min-h-screen bg-light-grey">
-    {/* Header */}
     <div style={{ background: "linear-gradient(135deg, hsl(0, 0%, 12%), hsl(60, 1%, 18%))" }} className="py-16 px-6">
       <div className="container mx-auto max-w-7xl">
         <Link
@@ -83,9 +74,8 @@ const CoreCommittee = () => (
       </div>
     </div>
 
-    {/* Members grid */}
     <div className="container mx-auto max-w-7xl px-6 py-16">
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">
         {members.map((m, i) => (
           <MemberCard key={m.name} member={m} delay={i * 60} />
         ))}
