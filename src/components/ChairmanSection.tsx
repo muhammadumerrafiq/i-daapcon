@@ -41,8 +41,7 @@ const ChairmanSection = () => {
                 className="absolute bottom-0 left-0 right-0 p-6"
                 style={{ background: "linear-gradient(to top, rgba(0,0,0,0.75), transparent)" }}
               >
-                <h3 className="text-white font-serif font-bold text-xl">Prof. Dr. Ahmed Raza Khan</h3>
-                <p className="text-white/80 font-sans text-sm mt-1">FCPS Dermatology, PhD (Germany)</p>
+                <h3 className="text-white font-serif font-bold text-xl">Maj Gen (Retd) Zafar Iqbal Shaikh</h3>
                 <span
                   className="inline-block mt-2 text-xs px-3 py-1 rounded-full font-sans font-semibold tracking-wide"
                   style={{ background: "linear-gradient(135deg, hsl(38, 46%, 56%), hsl(46, 62%, 52%))", color: "white" }}
@@ -71,7 +70,7 @@ const ChairmanSection = () => {
             <div className="flex items-center gap-4">
               <div className="w-12 h-[2px] bg-gradient-gold rounded" />
               <div>
-                <p className="font-serif font-bold text-charcoal-dark">Prof. Dr. Ahmed Raza Khan</p>
+                <p className="font-serif font-bold text-charcoal-dark">Maj Gen (Retd) Zafar Iqbal Shaikh</p>
                 <p className="text-sm font-sans gold-text">Conference Chairman, I-DAAP CON 2026</p>
               </div>
             </div>

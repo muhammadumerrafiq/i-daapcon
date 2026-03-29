@@ -5,19 +5,15 @@ import vpImg from "@/assets/vice-president.jpg";
 const leaders = [
   {
     image: presidentImg,
-    name: "Prof. Dr. Tariq Mehmood",
+    name: "Dr Bilal Shams",
     role: "President",
-    qualification: "FCPS, FAAD, MBA (UK)",
-    specialty: "Consultant Dermatologist & Cosmetic Physician",
     message:
       "As President of I-DAAP, I am committed to elevating dermatological standards across Pakistan. This conference is our greatest platform for scientific exchange and professional development.",
   },
   {
     image: vpImg,
-    name: "Dr. Sana Zafar",
+    name: "Dr Neelam Ayub",
     role: "Vice President",
-    qualification: "FCPS Dermatology, Fellowship (UAE)",
-    specialty: "Aesthetic Dermatologist & Laser Specialist",
     message:
       "I-DAAP CON brings together the brightest minds in dermatology and aesthetic medicine. I look forward to three inspiring days of learning, collaboration, and advancing our shared mission.",
   },
@@ -67,8 +63,7 @@ const LeadershipSection = () => {
               </div>
               <div className="p-7">
                 <h3 className="font-serif font-bold text-xl text-charcoal-dark mb-1">{leader.name}</h3>
-                <p className="gold-text text-sm font-sans font-semibold mb-1">{leader.qualification}</p>
-                <p className="text-muted-foreground text-sm font-sans mb-4">{leader.specialty}</p>
+                <p className="gold-text text-sm font-sans font-semibold mb-4">{leader.role} of IDAAP</p>
                 <div className="border-t border-light-grey pt-4">
                   <p className="text-charcoal/80 font-sans font-light text-sm leading-relaxed italic">
                     "{leader.message}"
